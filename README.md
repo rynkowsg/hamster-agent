@@ -1,0 +1,4 @@
+hamster-service
+===============
+
+Service Hamster
