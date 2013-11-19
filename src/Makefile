@@ -1,21 +1,45 @@
 CC=g++
-CXXFLAGS+=-std=c++0x -Wall
-LDFLAGS=-lboost_system -lboost_date_time -lboost_filesystem
-INC=-Imodel
+CXXFLAGS+=-std=c++0x -Wall -pedantic
+LDFLAGS+=-lboost_filesystem -lboost_date_time -lboost_system
 
-main: main.cpp ParserXML.o
-	$(CC) $(CXXFLAGS) $(INC) $^ $(LDFLAGS) -o $@
-	@echo "-------------------------------------------"
-	@./main
+vpath %.cpp ../src model
+
+prog = main
+
+src = main.cpp
+model_src = ParserXML.cpp
+
+objects = $(patsubst %.cpp,obj/%.o,$(src)) 
+model_objects = $(patsubst %.cpp,obj/%.o,$(model_src)) 
+
+$(prog): $(model_objects) $(objects)
+#	@echo Linking $(prog)...
+	$(CXX) $(model_objects) $(objects) $(LDFLAGS) -o $(prog)
+	@echo "-------------------------------------------"	
+	@./$(prog)
 	@echo "\n"
+#	@rm $(prog)
 
-ParserXML.o: model/ParserXML.cpp
-	$(CC) $(CXXFLAGS) $(INC) -c $< $(LDFLAGS) -o $@
+obj/%.o : %.cpp
+#	@echo $< 
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-clean:
-	@rm -f *.o main a.out
+$(objects) $(model_objects): | obj
 
-print-vars:
-	@echo CC is \'$(CC)\'
-	@echo CXXFLAGS is \'$(CXXFLAGS)\'
+obj:
+	mkdir -p $@
+
 	
+.PHONY: clean
+clean:
+	-@$(RM) -rf $(objects) $(model_objects) $(prog) obj 2> /dev/null
+
+print:
+	@echo "CC      ="\'$(CC)\'
+	@echo "CXXFLAGS="\'$(CXXFLAGS)\'
+	@echo "LDFLAGS ="\'$(LDFLAGS)\'
+	@echo "prog         = "$(prog)
+	@echo "src          = "$(src)
+	@echo "model_src    = "$(model_src)
+	@echo "objects      = "$(objects)
+	@echo "model_objects= "$(model_objects)
