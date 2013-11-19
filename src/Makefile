@@ -12,6 +12,8 @@ model_src = ParserXML.cpp
 objects = $(patsubst %.cpp,obj/%.o,$(src)) 
 model_objects = $(patsubst %.cpp,obj/%.o,$(model_src)) 
 
+all: $(prog) $(model_objects) $(objects)
+
 $(prog): $(model_objects) $(objects)
 #	@echo Linking $(prog)...
 	$(CXX) $(model_objects) $(objects) $(LDFLAGS) -o $(prog)
@@ -24,7 +26,9 @@ obj/%.o : %.cpp
 #	@echo $< 
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+
 $(objects) $(model_objects): | obj
+$(objects) $(model_objects): model/Fact.h
 
 obj:
 	mkdir -p $@

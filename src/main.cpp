@@ -18,9 +18,9 @@ int main(int argc, char* argv[])
     }
     Model::FactsListPtr list = Model::ParserXML::parse(XML_PATH);
     for(Model::Fact f : *list) {
-        std::cout << f.activity << "\n";
+        std::cout << f.toString() << "\n";
     }
-    std::cout << "length = " << list->size() << std::endl;
+    std::cout << "Length = " << list->size() << std::endl;
 
 
     return 0;

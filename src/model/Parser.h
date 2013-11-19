@@ -8,7 +8,7 @@ namespace Model {
 
 class Parser {
   public:
-    static FactsListPtr parse(const boost::filesystem::path& filepath);
+    static FactsListPtr parse( boost::filesystem::path const& filepath );
 };
     
 } // namespace Model
