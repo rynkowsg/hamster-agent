@@ -1,15 +1,19 @@
 CC=g++
-CXXFLAGS+=-std=c++0x
+CXXFLAGS+=-std=c++0x -Wall
+LDFLAGS=-lboost_system -lboost_date_time -lboost_filesystem
+INC=-Imodel
 
-main: main.cpp
-	$(CC) $(CXXFLAGS) -o $@ $^
-	@echo "run the program:"
+main: main.cpp ParserXML.o
+	$(CC) $(CXXFLAGS) $(INC) $^ $(LDFLAGS) -o $@
+	@echo "-------------------------------------------"
 	@./main
 	@echo "\n"
-	@rm main
-	
+
+ParserXML.o: model/ParserXML.cpp
+	$(CC) $(CXXFLAGS) $(INC) -c $< $(LDFLAGS) -o $@
+
 clean:
-	rm -f *.o main a.out
+	@rm -f *.o main a.out
 
 print-vars:
 	@echo CC is \'$(CC)\'
