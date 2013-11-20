@@ -17,33 +17,35 @@ using std::vector;
 
 namespace Model {
 
-struct Tags
+typedef string Activity;
+typedef string Category;
+typedef string Tag;
+typedef string Description;
+typedef ptime Time;
+
+struct TagsList
 {
-    Tags() : mTags() {}
-    Tags(string const& s, const char delim = ',') {
+    TagsList() : mTags() {}
+    TagsList(string const& s, const char delim = ',') {
         Utils::split(s, delim, mTags);
     }
-
     void fill(string const& s, const char delim = ',') {
         Utils::split(s, delim, mTags);
     }
-
     string toString(char separator = ',') const {
         return Utils::toString(mTags, separator);
     }
-
   private:
-    vector<string> mTags;
+    vector<Tag> mTags;
 };
 
-
 struct Fact {
-    string activity;
-    string category;
-    ptime start_time;
-    ptime end_time;
-    Tags tags;
-    string description;
+    Activity activity;
+    Category category;
+    Time start_time;
+    Time end_time;
+    TagsList tags;
+    Description description;
 
     string toString() const {
         stringstream x;

@@ -23,12 +23,12 @@ FactsListPtr ParserXML::parse( path const& filepath ) {
     BOOST_FOREACH( ptree::value_type const& v, pt.get_child("facts") ) {
         if( v.first == "fact" ) {
             Fact f;
-            f.activity = v.second.get<std::string>("activity");
-            f.category = v.second.get<std::string>("category");
-            f.tags.fill(v.second.get<std::string>("tags"));
+            f.activity = v.second.get<Activity>("activity");
+            f.category = v.second.get<Category>("category");
+            f.tags.fill( v.second.get<Tag>("tags") );
             f.start_time = time_from_string( v.second.get<std::string>("start_time") );
             f.end_time = time_from_string( v.second.get<std::string>("end_time") );
-            f.description = v.second.get<std::string>("description");
+            f.description = v.second.get<Description>("description");
             ans->push_back(f);
         }
     }
