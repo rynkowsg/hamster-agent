@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
-<facts>
+<data>
   <version>2</version>
-  <fact>
+  <row>
     <activity>Tworzenie bazy danych</activity>
     <category>Praca inżynierska</category>
     <tags>inżynierka,programowanie</tags>
     <start_time>2013-11-10 13:38:00</start_time>
     <end_time>2013-11-10 16:19:00</end_time>
     <description>Nauka korzystania z biblioteki SQLite3</description>
-  </fact>
-  <fact>
+  </row>
+  <row>
     <activity>Planowanie dnia</activity>
     <category>zarządzanie czasem</category>
     <tags>planowanie</tags>
     <start_time>2013-11-11 8:04:05</start_time>
     <end_time>2013-11-11 8:21:13</end_time>
     <description></description>
-  </fact>
-</facts>
+  </row>
+</data>
