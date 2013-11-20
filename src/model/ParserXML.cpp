@@ -25,7 +25,7 @@ FactsListPtr ParserXML::parse( path const& filepath ) {
             Fact f;
             f.activity = v.second.get<std::string>("activity");
             f.category = v.second.get<std::string>("category");
-            f.tags = v.second.get<std::string>("tags");
+            f.tags.fill(v.second.get<std::string>("tags"));
             f.start_time = time_from_string( v.second.get<std::string>("start_time") );
             f.end_time = time_from_string( v.second.get<std::string>("end_time") );
             f.description = v.second.get<std::string>("description");

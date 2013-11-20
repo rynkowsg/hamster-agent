@@ -1,8 +1,8 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include <boost/filesystem.hpp>     // path
 #include "Fact.h"
-#include <boost/filesystem.hpp>
 
 namespace Model {
 

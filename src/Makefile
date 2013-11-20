@@ -6,7 +6,7 @@ vpath %.cpp ../src model
 
 prog = main
 
-src = main.cpp
+src = main.cpp Utils.cpp
 model_src = ParserXML.cpp
 
 objects = $(patsubst %.cpp,obj/%.o,$(src)) 
@@ -28,7 +28,7 @@ obj/%.o : %.cpp
 
 
 $(objects) $(model_objects): | obj
-$(objects) $(model_objects): model/Fact.h
+$(objects) $(model_objects): model/Fact.h Utils.h
 
 obj:
 	mkdir -p $@

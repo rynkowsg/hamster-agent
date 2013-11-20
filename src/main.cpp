@@ -10,17 +10,17 @@ const fs::path XML_PATH("../example/sample.xml");
 
 int main(int argc, char* argv[])
 {
-    std::cout << "It's the beginning of this project ;)" << std::endl;
+    std::cout << "XML_PATH='" << XML_PATH << "'\n\n"; 
 
-    if ( !fs::exists( XML_PATH ) )
-    {
+    if ( !fs::exists( XML_PATH ) ) {
           std::cerr << "Can't find my file!" << std::endl;
     }
     Model::FactsListPtr list = Model::ParserXML::parse(XML_PATH);
-    for(Model::Fact f : *list) {
+
+    std::cout << "Count = " << list->size() << ". List of facts:\n";
+    for(Model::Fact const& f : *list) {
         std::cout << f.toString() << "\n";
     }
-    std::cout << "Length = " << list->size() << std::endl;
 
 
     return 0;
