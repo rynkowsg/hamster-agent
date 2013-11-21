@@ -14,7 +14,7 @@ model_objects = $(patsubst %.cpp,obj/%.o,$(model_src))
 
 all: $(prog) $(model_objects) $(objects)
 
-$(prog): $(model_objects) $(objects)
+$(prog): $(model_objects) $(objects) model/DatabaseOperation.h
 #	@echo Linking $(prog)...
 	$(CXX) $(model_objects) $(objects) $(LDFLAGS) -o $(prog)
 	@echo "-------------------------------------------"	

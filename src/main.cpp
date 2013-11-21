@@ -1,7 +1,9 @@
 #include <boost/filesystem.hpp> // exists
 #include <iostream>             // cout
+#include "model/DatabaseOperation.h"
 #include "model/ParserXML.h"    // parse
 #include "model/Data.h"         // Data, DataListPtr
+
 
 namespace fs = boost::filesystem;
 
