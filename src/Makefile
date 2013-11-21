@@ -14,7 +14,7 @@ model_objects = $(patsubst %.cpp,obj/%.o,$(model_src))
 
 all: $(prog) $(model_objects) $(objects)
 
-$(prog): $(model_objects) $(objects) model/DatabaseOperation.h
+$(prog): $(model_objects) $(objects) model/Data.h model/DatabaseOperation.h model/ParserXML.h
 #	@echo Linking $(prog)...
 	$(CXX) $(model_objects) $(objects) $(LDFLAGS) -o $(prog)
 	@echo "-------------------------------------------"	
@@ -28,12 +28,14 @@ obj/%.o : %.cpp
 
 
 $(objects) $(model_objects): | obj
-$(objects) $(model_objects): model/Data.h Utils.h
+$(model_objects): $(addprefix model/,$(notdir $(model_objects:%.o=%.h)))
+ParserXML.o: model/Data.h
+obj/Utils.o: Utils.h
+obj/Data.o: Utils.h
 
 obj:
 	mkdir -p $@
 
-	
 .PHONY: clean
 clean:
 	-@$(RM) -rf $(objects) $(model_objects) $(prog) obj 2> /dev/null
@@ -47,3 +49,4 @@ print:
 	@echo "model_src    = "$(model_src)
 	@echo "objects      = "$(objects)
 	@echo "model_objects= "$(model_objects)
+	@echo -----------------
