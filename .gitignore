@@ -11,3 +11,11 @@
 *.lai
 *.la
 *.a
+
+# Eclipse projet files
+.cproject
+.project
+.settings
+
+# Executes
+obj

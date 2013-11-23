@@ -1,11 +1,11 @@
-#ifndef DATABASE_H
-#define DATABASE_H
+#ifndef DATABASEOPERATION_H
+#define DATABASEOPERATION_H
 
 #include <string>   // string
 #include <vector>   // vector
 #include "Data.h"
 
-typedef std::size_t id;
+typedef unsigned int id;
 typedef std::vector<id> idList;
 
 namespace Model {
@@ -31,6 +31,6 @@ struct DatabaseOperation {
 
     void addData(const Data& data);
 };
-} // namepspace Model
+} // namespace Model
 
-#endif  // DATABASE_H
+#endif  // DATABASEOPERATION_H

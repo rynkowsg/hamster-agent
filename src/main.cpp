@@ -4,10 +4,9 @@
 #include "model/ParserXML.h"    // parse
 #include "model/Data.h"         // Data, DataListPtr
 
-
 namespace fs = boost::filesystem;
 
-const fs::path XML_PATH("../example/sample.xml");
+const fs::path XML_PATH("example/sample.xml");
 
 int main(int argc, char* argv[])
 {
