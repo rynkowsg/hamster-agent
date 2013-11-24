@@ -15,17 +15,10 @@ model_objects = $(patsubst %.cpp,obj/%.o,$(model_src))
 all: $(prog) $(model_objects) $(objects)
 
 $(prog): $(model_objects) $(objects) src/model/Data.h src/model/DatabaseOperation.h src/model/ParserXML.h
-#	@echo Linking $(prog)...
 	$(CXX) $(model_objects) $(objects) $(LDFLAGS) -o $(prog)
-	@echo "-------------------------------------------"
-	@./$(prog)
-	@echo "\n"
-#	@rm $(prog)
 
 obj/%.o : %.cpp
-#	@echo $<
 	$(CXX) $(CXXFLAGS) -c $< -o $@
-
 
 $(objects) $(model_objects): | obj
 $(model_objects): $(addprefix src/model/,$(notdir $(model_objects:%.o=%.h)))
