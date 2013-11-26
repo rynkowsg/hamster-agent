@@ -32,8 +32,10 @@ int main(int argc, char* argv[])
     for(Model::Row const& element : *list) {
         std::cout << element.toString() << "\n";
     }
+    std::cout << std::endl;
 
-    Model::Database(DB_PATH.string()).addCategory("Ppraca1");
+    Model::Database(DB_PATH.string()).test();
+
 
     return 0;
 }

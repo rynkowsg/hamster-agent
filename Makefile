@@ -7,7 +7,7 @@ vpath %.cpp src src/model
 
 prog = obj/main
 
-src = main.cpp Utils.cpp
+src = main.cpp
 model_src = Data.cpp ParserXML.cpp Database.cpp
 
 objects = $(patsubst %.cpp,obj/%.o,$(src))
@@ -24,8 +24,6 @@ obj/%.o : %.cpp
 $(objects) $(model_objects): | obj
 $(model_objects): $(addprefix src/model/,$(notdir $(model_objects:%.o=%.h)))
 obj/ParserXML.o: src/model/Data.h
-obj/Utils.o: src/Utils.h
-obj/Data.o: src/Utils.h
 obj/Database.o: src/model/Database.h
 
 obj:

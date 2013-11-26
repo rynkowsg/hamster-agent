@@ -28,17 +28,22 @@ public:
     Database(const std::string& p);
     ~Database();
 
-    id addCategory(const Category& name);
-    id addActivity(const Activity& name, id category_id);
-    id addTag(const Tag& name);
+    id getCategoryId(const std::string& search_name);
+    id getActivityId(const std::string& search_name, id activity_id);
+    id getTagId(const std::string& search_name);
+    id addCategory(const std::string& name);
+    id addActivity(const std::string& name, id category_id);
+    id addTag(const std::string& name);
+
     //idList addTags(const TagsList& tags);
-    id addFact(const Fact& fact);
+    //id addFact(const Fact& fact);
     //id addFact(id activity_id, const Time& start,
     //              const Time& end, Description& desc);
-    id addFactTag(const id fact_id, const idList& tag_idList);
+    //id addFactTag(const id fact_id, const idList& tag_idList);
 
-    void addData(const Data& data);
+    //void addData(const Data& data);
 
+    void test();
   private:
     cppdb::session sql;
 };

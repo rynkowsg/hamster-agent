@@ -1,43 +1,24 @@
 #ifndef FACT_H
 #define FACT_H
 
-#include <boost/date_time/posix_time/posix_time.hpp>    // ptime
+#include <ctime>        // tm
 #include <memory>       // shared_ptr
 #include <string>       // string
 #include <vector>       // vector
 
-using boost::posix_time::ptime;
 using std::string;
 using std::vector;
 
 namespace Model {
 
-typedef string Activity;
-typedef string Category;
-typedef string Description;
-typedef ptime Time;
-
 struct Fact {
-    Activity activity;
-    Category category;
-    Time start_time;
-    Time end_time;
-    Description description;
+    string activity;
+    string category;
+    std::tm start_time;
+    std::tm end_time;
+    string description;
 };
-
-typedef string Tag;
-class TagsList
-{
-  public:
-    TagsList() : mTags() {}
-    TagsList(string const& s, char delim = ',');
-
-    void fill(string const& s, char delim = ',');
-    inline string toString(char delim = ',') const;
-
-  private:
-    vector<Tag> mTags;
-};
+typedef vector<string> TagsList;
 
 struct Row {
     Fact fact;
@@ -47,6 +28,10 @@ struct Row {
 };
 typedef vector<Row> Data;
 typedef std::shared_ptr<Data> DataPtr;
+
+
+string tagstoString(const TagsList& vec, const char delim);
+TagsList& stringToTags(const string& s, const char delim, TagsList& elems);
 
 } // namepspace Model
 
