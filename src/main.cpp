@@ -16,7 +16,9 @@ int main(int argc, char* argv[])
     std::cout << "XML_PATH='" << XML_PATH << "'\n\n"; 
 
     if ( !exists( XML_PATH ) ) {
-          std::cerr << "Can't find my file!" << std::endl;
+          std::cerr << "Can't find database file!" << std::endl;
+          // TODO: create/copy database file
+          return 1;
     }
 
     Model::DataPtr list;
@@ -24,7 +26,7 @@ int main(int argc, char* argv[])
         list = Model::ParserXML::parse(XML_PATH);
     }
     catch(std::exception const &e) {
-        std::cerr << "Parser ERROR: " << e.what() << std::endl;
+        std::cerr << "Oh, exception: " << e.what() << std::endl;
         return 1;
     }
 
