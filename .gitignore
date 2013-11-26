@@ -12,10 +12,11 @@
 *.la
 *.a
 
-# Eclipse projet files
+# Eclipse project files
 .cproject
 .project
 .settings
+.gdbinit
 
 # Executes
 obj
