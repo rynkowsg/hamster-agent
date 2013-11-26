@@ -1,6 +1,7 @@
 #ifndef FACT_H
 #define FACT_H
 
+#include <boost/optional/optional.hpp>  // optional
 #include <ctime>        // tm
 #include <memory>       // shared_ptr
 #include <string>       // string
@@ -15,7 +16,7 @@ struct Fact {
     string activity;
     string category;
     std::tm start_time;
-    std::tm end_time;
+    boost::optional<std::tm> end_time;
     string description;
 };
 typedef vector<string> TagsList;

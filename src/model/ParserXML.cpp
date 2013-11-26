@@ -50,10 +50,9 @@ DataPtr ParserXML::parse( path const& filepath ) {
                     strptime(v.second.get<std::string>("<xmlattr>.start_time").c_str(), time_format, &row.fact.start_time);
                     boost::optional<std::string> end = v.second.get_optional<std::string>("<xmlattr>.end_time");
                     if( end.is_initialized() ) {
-                        strptime(end.get().c_str(), time_format, &row.fact.end_time);
-                    }
-                    else {
-                        strptime("2000-01-01 00:00:00", time_format, &row.fact.end_time);
+                        std::tm tmp;
+                        strptime(end.get().c_str(), time_format, &tmp);
+                        row.fact.end_time = tmp;
                     }
                 }
                 else if( t.first == "activity" ) {
