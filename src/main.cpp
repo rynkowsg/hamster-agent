@@ -3,6 +3,7 @@
 #include "model/Database.h"
 #include "model/ParserXML.h"    // parse
 #include "model/Data.h"         // Data, DataListPtr
+#include "model/db/Storage.h"
 
 using boost::filesystem::path;
 using boost::filesystem::exists;
@@ -13,6 +14,9 @@ const path DB_PATH("example/hamster.db");
 
 int main(int argc, char* argv[])
 {
+    Storage::instance().AddCategory("Nowa kategoria 2");
+
+
     std::cout << "XML_PATH='" << XML_PATH << "'\n\n"; 
 
     if ( !exists( XML_PATH ) ) {
