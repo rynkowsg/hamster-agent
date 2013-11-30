@@ -1,8 +1,7 @@
 #ifndef FACT_H
 #define FACT_H
 
-#include <boost/optional/optional.hpp>  // optional
-#include <ctime>        // tm
+#include <ctime>        // time_t
 #include <memory>       // shared_ptr
 #include <string>       // string
 #include <vector>       // vector
@@ -15,8 +14,8 @@ namespace Model {
 struct Fact {
     string activity;
     string category;
-    std::tm start_time;
-    boost::optional<std::tm> end_time;
+    std::time_t start_time;
+    std::time_t end_time;
     string description;
 };
 typedef vector<string> TagsList;

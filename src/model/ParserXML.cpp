@@ -11,8 +11,6 @@
 using boost::filesystem::path;
 using boost::property_tree::ptree;
 
-const char* time_format = "%Y-%m-%d %H:%M:%S";
-
 namespace Model {
 
 DataPtr ParserXML::parse( path const& filepath ) {
@@ -47,13 +45,9 @@ DataPtr ParserXML::parse( path const& filepath ) {
             {
                 if( t.first == "<xmlattr>" )
                 {
-                    strptime(v.second.get<std::string>("<xmlattr>.start_time").c_str(), time_format, &row.fact.start_time);
-                    boost::optional<std::string> end = v.second.get_optional<std::string>("<xmlattr>.end_time");
-                    if( end.is_initialized() ) {
-                        std::tm tmp;
-                        strptime(end.get().c_str(), time_format, &tmp);
-                        row.fact.end_time = tmp;
-                    }
+                    row.fact.start_time = v.second.get<int>("<xmlattr>.start_time");
+                    boost::optional<int> end = v.second.get_optional<int>("<xmlattr>.end_time");
+                    row.fact.end_time = end.is_initialized() ? end.get() : 0;
                 }
                 else if( t.first == "activity" ) {
                     row.fact.activity = t.second.get<std::string>("<xmlattr>.name");

@@ -3,7 +3,7 @@
 #include <sstream>                                      // stringstream
 #include "Data.h"
 
-using boost::posix_time::ptime_from_tm;
+using boost::posix_time::from_time_t;
 using boost::posix_time::to_simple_string;
 using std::stringstream;
 
@@ -13,10 +13,10 @@ string Row::toString(char delim) const {
     stringstream x;
     x << delim <<  fact.activity << delim
         << fact.category << delim
-        << boost::posix_time::ptime_from_tm(fact.start_time) << delim
-        << ( ( fact.end_time.is_initialized()==false ) ? "now"
-                : to_simple_string( ptime_from_tm(fact.end_time.get()) ) )
-        << delim << tagstoString(tags,',') << delim
+        << to_simple_string(from_time_t(fact.start_time)) << delim
+        << (fact.end_time==0 ? "now"
+                : to_simple_string(from_time_t(fact.end_time))) << delim
+        << tagstoString(tags,',') << delim
         << fact.description << delim;
     return x.str();
 }

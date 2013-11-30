@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <data>
-  <row start_time="2013-11-10 13:38:00" end_time="2013-11-10 16:19:00">
+  <row start_time="1384090680" end_time="1384100340">
     <activity name="Tworzenie bazy danych"/>
     <category name="Praca inżynierska"/>
     <tag name="inżynierka"/>
     <tag name="progamowanie"/>
     <description>Nauka korzystania z biblioteki SQLite3</description>
   </row>
-  <row start_time="2013-11-11 8:04:05">
+  <row start_time="1384157045">
     <activity name="Planowanie dnia"/>
     <category name="Zarządzanie czasem"/>
     <tag name="planowanie"/>
