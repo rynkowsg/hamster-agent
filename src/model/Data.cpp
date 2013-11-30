@@ -1,5 +1,5 @@
 #include <algorithm>                                    // for_each
-#include "boost/date_time/posix_time/posix_time.hpp"    // ptime_from_tm
+#include "boost/date_time/posix_time/posix_time.hpp"    // ptime_from_tm, to_simple_string
 #include <sstream>                                      // stringstream
 #include "Data.h"
 
@@ -36,6 +36,15 @@ TagsList& stringToTags(const string& s, const char delim, TagsList& elems) {
         elems.push_back(item);
     }
     return elems;
+}
+
+string Fact::serializeToString() const {
+    stringstream ss;
+    ss << activity << "@" << category;
+    if(!description.empty() || !tags.empty())
+        ss << "," << description << " #" << tagstoString(tags, '#');
+
+    return ss.str();
 }
 
 } // namepspace Model

@@ -21,6 +21,7 @@ struct Fact {
     std::time_t end_time;
     string description;
 
+    string serializeToString() const;
     string toString(char delim = '|') const;
 };
 

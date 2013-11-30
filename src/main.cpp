@@ -37,6 +37,8 @@ int main(int argc, char* argv[])
     std::cout << "Count = " << list->size() << ". Parsed data:\n";
     for(Model::Fact const& element : *list) {
         std::cout << element.toString() << "\n";
+        std::cout << "serialized:  " << element.serializeToString() << "\n";
+        Storage::instance().AddFact(element.serializeToString(), element.start_time, element.end_time, false);
     }
     std::cout << std::endl;
 
