@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
     }
 
     std::cout << "Count = " << list->size() << ". Parsed data:\n";
-    for(Model::Row const& element : *list) {
+    for(Model::Fact const& element : *list) {
         std::cout << element.toString() << "\n";
     }
     std::cout << std::endl;

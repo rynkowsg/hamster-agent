@@ -11,22 +11,20 @@ using std::vector;
 
 namespace Model {
 
+typedef vector<string> TagsList;
+
 struct Fact {
     string activity;
     string category;
+    vector<string> tags;
     std::time_t start_time;
     std::time_t end_time;
     string description;
-};
-typedef vector<string> TagsList;
-
-struct Row {
-    Fact fact;
-    TagsList tags;
 
     string toString(char delim = '|') const;
 };
-typedef vector<Row> Data;
+
+typedef vector<Fact> Data;
 typedef std::shared_ptr<Data> DataPtr;
 
 

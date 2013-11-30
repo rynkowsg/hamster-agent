@@ -9,15 +9,15 @@ using std::stringstream;
 
 namespace Model {
 
-string Row::toString(char delim) const {
+string Fact::toString(char delim) const {
     stringstream x;
-    x << delim <<  fact.activity << delim
-        << fact.category << delim
-        << to_simple_string(from_time_t(fact.start_time)) << delim
-        << (fact.end_time==0 ? "now"
-                : to_simple_string(from_time_t(fact.end_time))) << delim
+    x << delim <<  activity << delim
+        << category << delim
+        << to_simple_string(from_time_t(start_time)) << delim
+        << (end_time==0 ? "now"
+                : to_simple_string(from_time_t(end_time))) << delim
         << tagstoString(tags,',') << delim
-        << fact.description << delim;
+        << description << delim;
     return x.str();
 }
 

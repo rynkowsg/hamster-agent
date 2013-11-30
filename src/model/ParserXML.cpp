@@ -40,29 +40,29 @@ DataPtr ParserXML::parse( path const& filepath ) {
     DataPtr ans = std::make_shared<Data>();
     for( ptree::value_type const& v : pt.get_child("data") ) {
         if( v.first == "row" ) {
-            Row row;
+            Fact fact;
             for( ptree::value_type const& t : v.second )
             {
                 if( t.first == "<xmlattr>" )
                 {
-                    row.fact.start_time = v.second.get<int>("<xmlattr>.start_time");
+                    fact.start_time = v.second.get<int>("<xmlattr>.start_time");
                     boost::optional<int> end = v.second.get_optional<int>("<xmlattr>.end_time");
-                    row.fact.end_time = end.is_initialized() ? end.get() : 0;
+                    fact.end_time = end.is_initialized() ? end.get() : 0;
                 }
                 else if( t.first == "activity" ) {
-                    row.fact.activity = t.second.get<std::string>("<xmlattr>.name");
+                    fact.activity = t.second.get<std::string>("<xmlattr>.name");
                 }
                 else if( t.first == "category" ) {
-                    row.fact.category = t.second.get<std::string>("<xmlattr>.name");
+                    fact.category = t.second.get<std::string>("<xmlattr>.name");
                 }
                 else if( t.first == "tag" ) {
-                    row.tags.push_back(t.second.get<std::string>("<xmlattr>.name"));
+                    fact.tags.push_back(t.second.get<std::string>("<xmlattr>.name"));
                 }
                 else if( t.first == "description" ) {
-                    row.fact.description = t.second.data();
+                    fact.description = t.second.data();
                 }
             }
-            ans->push_back(row);
+            ans->push_back(fact);
         }
     }
     return ans;
