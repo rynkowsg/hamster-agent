@@ -2,6 +2,7 @@ CC=g++
 CXXFLAGS+=-std=c++11 -Wall -pedantic -g
 LDFLAGS+=-lboost_filesystem -lboost_date_time -lboost_system
 LDFLAGS+=-lcppdb -lcppdb_sqlite3
+LDFLAGS+=-lmsgpack
 vpath %.cpp src src/model
 
 prog = obj/main

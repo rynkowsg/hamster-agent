@@ -5,6 +5,7 @@
 #include <memory>       // shared_ptr
 #include <string>       // string
 #include <vector>       // vector
+#include <msgpack.hpp>
 
 using std::string;
 using std::vector;
@@ -23,6 +24,8 @@ struct Fact {
 
     string serializeToString() const;
     string toString(char delim = '|') const;
+
+    MSGPACK_DEFINE(activity, category, tags, start_time, end_time, description)
 };
 
 typedef vector<Fact> Data;

@@ -33,8 +33,22 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    std::cout << "Count = " << list->size() << ". Parsed data:\n";
-    for(Model::Fact const& element : *list) {
+    // serialize
+    msgpack::sbuffer sbuf;
+    msgpack::pack(sbuf, *list);
+
+    // deserialize
+    msgpack::unpacked msg;
+    msgpack::unpack(&msg, sbuf.data(), sbuf.size());
+
+    msgpack::object obj = msg.get();
+
+    // you can convert object to myclass directly
+    Model::Data rvec;
+    obj.convert(&rvec);
+
+    std::cout << "Count = " << rvec.size() << ". Parsed data:\n";
+    for(Model::Fact const& element : rvec) {
         std::cout << element.toString() << "\n";
         std::cout << "serialized:  " << element.serializeToString() << "\n";
         Storage::instance().AddFact(element.serializeToString(), element.start_time, element.end_time, false);
