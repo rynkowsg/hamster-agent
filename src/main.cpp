@@ -1,6 +1,5 @@
 #include <boost/filesystem.hpp> // exists, path
 #include <iostream>             // cout
-#include "model/Database.h"
 #include "model/ParserXML.h"    // parse
 #include "model/Data.h"         // Data, DataListPtr
 #include "model/db/Storage.h"
@@ -41,9 +40,6 @@ int main(int argc, char* argv[])
         Storage::instance().AddFact(element.serializeToString(), element.start_time, element.end_time, false);
     }
     std::cout << std::endl;
-
-    Model::Database(DB_PATH.string()).test();
-
 
     return 0;
 }

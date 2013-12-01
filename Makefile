@@ -7,14 +7,14 @@ vpath %.cpp src src/model
 prog = obj/main
 
 src = main.cpp
-model_src = Data.cpp ParserXML.cpp Database.cpp
+model_src = Data.cpp ParserXML.cpp
 
 objects = $(patsubst %.cpp,obj/%.o,$(src))
 model_objects = $(patsubst %.cpp,obj/%.o,$(model_src))
 
 all: $(prog) $(model_objects) $(objects) obj/Storage.o
 
-$(prog): $(model_objects) $(objects) src/model/Data.h src/model/Database.h src/model/ParserXML.h
+$(prog): $(model_objects) $(objects) src/model/Data.h src/model/ParserXML.h
 	$(CXX) $(model_objects) $(objects) obj/Storage.o $(LDFLAGS) -o $(prog) $(shell pkg-config dbus-c++-1 --cflags --libs)
 
 obj/%.o : %.cpp
@@ -23,7 +23,6 @@ obj/%.o : %.cpp
 $(objects) $(model_objects): | obj
 $(model_objects): $(addprefix src/model/,$(notdir $(model_objects:%.o=%.h)))
 obj/ParserXML.o: src/model/Data.h
-obj/Database.o: src/model/Database.h
 
 obj/Storage.o: src/model/db/Storage.cpp src/model/db/Storage.h src/model/db/service.xml
 		dbusxx-xml2cpp src/model/db/service.xml --proxy=src/model/db/Hamster_proxy.hpp
