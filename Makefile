@@ -24,7 +24,8 @@ $(objects) $(model_objects): | obj
 $(model_objects): $(addprefix src/model/,$(notdir $(model_objects:%.o=%.h)))
 obj/ParserXML.o: src/model/Data.h
 
-obj/Storage.o: src/model/db/Storage.cpp src/model/db/Storage.h src/model/db/service.xml
+obj/Storage.o: src/model/db/Storage.cpp src/model/db/Storage.h
+		qdbus org.gnome.Hamster /org/gnome/Hamster org.freedesktop.DBus.Introspectable.Introspect > src/model/db/service.xml
 		dbusxx-xml2cpp src/model/db/service.xml --proxy=src/model/db/Hamster_proxy.hpp
 		$(CXX) $(CXXFLAGS) -g -c $< -o $@ $(shell pkg-config dbus-c++-1 --cflags --libs)
 
@@ -34,7 +35,7 @@ obj:
 .PHONY: clean
 clean:
 #	-@$(RM) -rf $(objects) $(model_objects) $(prog) 2> /dev/null
-	@$(RM) -rf obj/* 2> /dev/null
+	@$(RM) -rf obj src/model/db/Hamster_proxy.hpp src/model/db/service.xml 2> /dev/null
 
 print:
 	@echo "CC      ="\'$(CC)\'
