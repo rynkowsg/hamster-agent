@@ -1,8 +1,8 @@
 #include <boost/filesystem.hpp> // exists, path
 #include <iostream>             // cout
-#include "model/ParserXML.h"    // parse
-#include "model/Data.h"         // Data, DataListPtr
-#include "model/db/Storage.h"
+#include "ParserXML.h"    // parse
+#include "Data.h"         // Data, DataListPtr
+#include "Storage.h"
 
 using boost::filesystem::path;
 using boost::filesystem::exists;

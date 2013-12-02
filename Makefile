@@ -1,50 +1,71 @@
-CC=g++
-CXXFLAGS+=-std=c++11 -Wall -pedantic -g
+CXX=g++
+CXXFLAGS+=-std=c++11 -Wall -Werror -pedantic -g
+CXXFLAGS+=-I$(HDIR) $(shell pkg-config dbus-c++-1 --cflags)
 LDFLAGS+=-lboost_filesystem -lboost_date_time -lboost_system
 LDFLAGS+=-lcppdb -lcppdb_sqlite3
-LDFLAGS+=-lmsgpack
-vpath %.cpp src src/model
+LDFLAGS+=-lmsgpack $(shell pkg-config dbus-c++-1 --libs)
 
-prog = obj/main
+HDIR=include
+SRCDIR=src
+OBJDIR=obj
+DEPSDIR=deps
+SERVICE_XML_PATH=service.xml
+SERVICE_PROXY_PATH=$(HDIR)/Hamster_proxy.hpp
 
-src = main.cpp
-model_src = Data.cpp ParserXML.cpp
+vpath %.h $(HDIR)
+vpath %.cpp $(SRCDIR)
 
-objects = $(patsubst %.cpp,obj/%.o,$(src))
-model_objects = $(patsubst %.cpp,obj/%.o,$(model_src))
+prog = main
+src = $(notdir $(shell find $(SRCDIR) -name "*.cpp"))
+objects = $(patsubst %.cpp,$(OBJDIR)/%.o,$(src))
+deps = $(patsubst %.cpp,$(DEPSDIR)/%.d,$(src))
+headers = $(notdir $(shell find $(HDIR) -name "*.h"))
 
-all: $(prog) $(model_objects) $(objects) obj/Storage.o
+all: $(prog) $(objects)
 
-$(prog): $(model_objects) $(objects) src/model/Data.h src/model/ParserXML.h
-	$(CXX) $(model_objects) $(objects) obj/Storage.o $(LDFLAGS) -o $(prog) $(shell pkg-config dbus-c++-1 --cflags --libs)
+$(prog): $(objects) Makefile
+	@$(CXX) $(objects) $(LDFLAGS) -o $(prog); \
+	echo $@
 
-obj/%.o : %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@ $(shell pkg-config dbus-c++-1 --cflags --libs)
+$(DEPSDIR)/%.d: %.cpp Makefile | $(DEPSDIR) dbus_prepare
+	@set -e; \
+	rm -f $@; $(CXX) $(CXXFLAGS) -MM $< > $@.dd;\
+	sed 's,\($*\)\.o[ :]*,$(OBJDIR)/\1.o $@ : ,g' < $@.dd > $@; \
+	rm $@.dd;\
+	echo $@
+-include $(src:%.cpp=$(DEPSDIR)/%.d)
 
-$(objects) $(model_objects): | obj
-$(model_objects): $(addprefix src/model/,$(notdir $(model_objects:%.o=%.h)))
-obj/ParserXML.o: src/model/Data.h
+$(OBJDIR)/%.o: %.cpp $(DEPSDIR)/%.d Makefile
+	@$(CXX) -c $< -o $@ $(CXXFLAGS); \
+	echo $@
 
-obj/Storage.o: src/model/db/Storage.cpp src/model/db/Storage.h
-		qdbus org.gnome.Hamster /org/gnome/Hamster org.freedesktop.DBus.Introspectable.Introspect > src/model/db/service.xml
-		dbusxx-xml2cpp src/model/db/service.xml --proxy=src/model/db/Hamster_proxy.hpp
-		$(CXX) $(CXXFLAGS) -g -c $< -o $@ $(shell pkg-config dbus-c++-1 --cflags --libs)
+$(objects): | $(OBJDIR)
 
-obj:
-	mkdir -p $@
+$(DEPSDIR) $(OBJDIR):
+	@mkdir -p $@; \
+	echo created: $@
 
-.PHONY: clean
+dbus_prepare:
+	@test -s $(SERVICE_PROXY_PATH) || { \
+		qdbus org.gnome.Hamster /org/gnome/Hamster org.freedesktop.DBus.Introspectable.Introspect > $(SERVICE_XML_PATH) 2> /dev/null; \
+		dbusxx-xml2cpp $(SERVICE_XML_PATH) --proxy=$(SERVICE_PROXY_PATH) 2> /dev/null; \
+		rm $(SERVICE_XML_PATH); \
+		echo created $(SERVICE_PROXY_PATH); \
+	}
+
 clean:
-#	-@$(RM) -rf $(objects) $(model_objects) $(prog) 2> /dev/null
-	@$(RM) -rf obj src/model/db/Hamster_proxy.hpp src/model/db/service.xml 2> /dev/null
+	-@$(RM) -rf $(prog) $(objects) 2> /dev/null; \
+	$(RM) -rf $(DEPSDIR) 2> /dev/null
+#	$(RM) $(SERVICE_PROXY_PATH) 2> /dev/null;
 
 print:
-	@echo "CC      ="\'$(CC)\'
-	@echo "CXXFLAGS="\'$(CXXFLAGS)\'
-	@echo "LDFLAGS ="\'$(LDFLAGS)\'
-	@echo "prog         = "$(prog)
-	@echo "src          = "$(src)
-	@echo "model_src    = "$(model_src)
-	@echo "objects      = "$(objects)
-	@echo "model_objects= "$(model_objects)
+	@echo "prog      ="\'$(prog)\'
+	@echo "src       ="\'$(src)\'
+	@echo "objects   ="\'$(objects)\'
+	@echo "deps      ="\'$(deps)\'
+	@echo "headers   ="\'$(headers)\'
+	@echo $(objects:$(OBJDIR)/Storage.o=)
+	@echo $(src:%.cpp=$(DEPSDIR)/%.d)
 	@echo -----------------
+
+.PHONY: all clean dbus_prepare print

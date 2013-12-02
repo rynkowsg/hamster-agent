@@ -18,9 +18,7 @@
 .settings
 .gdbinit
 
-# Executes
+# Others
+deps
 obj
-
-# Automatically generated
-src/model/db/Hamster_proxy.hpp
-src/model/db/service.xml
+main
