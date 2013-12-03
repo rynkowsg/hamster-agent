@@ -5,16 +5,27 @@
 #include "Storage.h"
 #include "Deamon.h"
 
-using boost::filesystem::path;
-using boost::filesystem::exists;
-
-const path XML_PATH("/home/grzecho/Projects/hamster-service/example/sample.xml");
-
+void test_code();
 
 int main(int argc, char* argv[])
 {
-    Storage::instance().AddCategory("Nowa kategoria 2");
+    test_code();
+    return 0;
+}
 
+//-----------
+using boost::filesystem::path;
+using boost::filesystem::exists;
+
+<<<<<<< HEAD
+const path XML_PATH("/home/grzecho/Projects/hamster-service/example/sample.xml");
+=======
+>>>>>>> 7d278c0... Isolated tested code in main.cpp
+
+const path XML_PATH("/home/grzecho/Projects/hamster-service/example/sample.xml");
+
+void test_code() {
+    Storage::instance().AddCategory("Nowa kategoria 2");
 
     std::cout << "XML_PATH='" << XML_PATH << "'\n\n"; 
 
@@ -54,8 +65,4 @@ int main(int argc, char* argv[])
         Storage::instance().AddFact(element.serializeToString(), element.start_time, element.end_time, false);
     }
     std::cout << std::endl;
-
-    Deamon::demonize();
-
-    return 0;
 }
