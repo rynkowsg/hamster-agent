@@ -15,7 +15,7 @@ SERVICE_PROXY_PATH=$(HDIR)/Hamster_proxy.hpp
 vpath %.h $(HDIR)
 vpath %.cpp $(SRCDIR)
 
-prog = main
+prog = hamster-sync
 src = $(notdir $(shell find $(SRCDIR) -name "*.cpp"))
 objects = $(patsubst %.cpp,$(OBJDIR)/%.o,$(src))
 deps = $(patsubst %.cpp,$(DEPSDIR)/%.d,$(src))
@@ -58,6 +58,17 @@ clean:
 	$(RM) -rf $(DEPSDIR) 2> /dev/null
 #	$(RM) $(SERVICE_PROXY_PATH) 2> /dev/null;
 
+INSTALL_DIR=/usr/sbin
+INITD_DIR=/etc/init.d
+
+install:
+	cp $(prog) $(INSTALL_DIR)
+	cp script-initd.sh $(INITD_DIR)/$(prog)
+
+remove:
+	$(RM) $(INSTALL_DIR)/$(prog)
+	$(RM) $(INITD_DIR)/$(prog)
+
 print:
 	@echo "prog      ="\'$(prog)\'
 	@echo "src       ="\'$(src)\'
@@ -68,4 +79,4 @@ print:
 	@echo $(src:%.cpp=$(DEPSDIR)/%.d)
 	@echo -----------------
 
-.PHONY: all clean dbus_prepare print
+.PHONY: all clean dbus_prepare print install remove

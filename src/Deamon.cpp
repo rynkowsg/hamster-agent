@@ -20,7 +20,7 @@ Deamon::~Deamon() {
     // TODO Auto-generated destructor stub
 }
 
-void Deamon::demonize() {
+void Deamon::demonize(void (*process)()) {
     pid_t pid, sid;
 
    //Fork the Parent Process
@@ -47,14 +47,5 @@ void Deamon::demonize() {
     close(STDOUT_FILENO);
     close(STDERR_FILENO);
 
-    //----------------
-    //Main Process
-    //----------------
-    while(true) {
-        //process();    //Run our Process
-        sleep(60);    //Sleep for 60 seconds
-    }
-
-    //Close the log
-//    closelog ();
+    process();    //Run our Process
 }

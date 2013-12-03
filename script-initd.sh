@@ -1,10 +1,10 @@
 #!/bin/sh
 # chkconfig 345 85 60
 # description: startup script for hamster daemon
-# processname: main
+# processname: hamster-sync-mobile
 
 ### BEGIN INIT INFO
-# Provides:          main
+# Provides:          hamster-sync-mobile
 # Required-Start:    $remote_fs $syslog
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
@@ -21,10 +21,9 @@
 
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
-DESC="Description of the service"
-DIR="/home/grzecho/Projects/hamster-service"
-NAME=main
-DAEMON=$DIR/$NAME
+DESC="Service synchronizes mobile hamsters with local hamster"
+NAME=hamster-sync
+DAEMON=/usr/sbin/$NAME
 DAEMON_ARGS=
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
@@ -57,9 +56,9 @@ do_start()
     #   0 if daemon has been started
     #   1 if daemon was already running
     #   2 if daemon could not be started
-    start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON --test > /dev/null \
+    start-stop-daemon --start --quiet --pidfile $PIDFILE --background --make-pidfile --make --exec $DAEMON --test > /dev/null \
         || return 1
-    start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON -- \
+    start-stop-daemon --start --quiet --pidfile $PIDFILE --background --make-pidfile --exec $DAEMON -- \
         $DAEMON_ARGS \
         || return 2
     # Add code here, if necessary, that waits for the process to be ready

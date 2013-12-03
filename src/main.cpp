@@ -6,21 +6,25 @@
 #include "Deamon.h"
 
 void test_code();
+void process();
 
 int main(int argc, char* argv[])
 {
-    test_code();
+//    test_code();
+
+    // 1. For init script from skeleton script - I don't need to use fork()
+    process();
+
+    // 2. With fork
+    //Deamon::demonize(&process);
+
+
     return 0;
 }
 
 //-----------
 using boost::filesystem::path;
 using boost::filesystem::exists;
-
-<<<<<<< HEAD
-const path XML_PATH("/home/grzecho/Projects/hamster-service/example/sample.xml");
-=======
->>>>>>> 7d278c0... Isolated tested code in main.cpp
 
 const path XML_PATH("/home/grzecho/Projects/hamster-service/example/sample.xml");
 
@@ -32,7 +36,7 @@ void test_code() {
     if ( !exists( XML_PATH ) ) {
           std::cerr << "Can't find xml file!" << std::endl;
           // TODO: create/copy database file
-          return 1;
+          exit(1);
     }
 
     Model::DataPtr list;
@@ -41,7 +45,7 @@ void test_code() {
     }
     catch(std::exception const &e) {
         std::cerr << "Oh, exception: " << e.what() << std::endl;
-        return 1;
+        exit(1);
     }
 
     // serialize
@@ -65,4 +69,14 @@ void test_code() {
         Storage::instance().AddFact(element.serializeToString(), element.start_time, element.end_time, false);
     }
     std::cout << std::endl;
+}
+
+void process() {
+    //----------------
+    //Main Process
+    //----------------
+    while(true) {
+        // staff to do
+        sleep(60);    //Sleep for 60 seconds
+    }
 }

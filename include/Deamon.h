@@ -12,7 +12,7 @@ class Deamon {
 public:
     Deamon();
     virtual ~Deamon();
-    static void demonize();
+    static void demonize(void (*process)());
 };
 
 #endif /* DEAMON_H_ */
