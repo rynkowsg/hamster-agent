@@ -3,12 +3,12 @@
 #include "ParserXML.h"    // parse
 #include "Data.h"         // Data, DataListPtr
 #include "Storage.h"
+#include "Deamon.h"
 
 using boost::filesystem::path;
 using boost::filesystem::exists;
 
-const path XML_PATH("example/sample.xml");
-const path DB_PATH("example/hamster.db");
+const path XML_PATH("/home/grzecho/Projects/hamster-service/example/sample.xml");
 
 
 int main(int argc, char* argv[])
@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
     std::cout << "XML_PATH='" << XML_PATH << "'\n\n"; 
 
     if ( !exists( XML_PATH ) ) {
-          std::cerr << "Can't find database file!" << std::endl;
+          std::cerr << "Can't find xml file!" << std::endl;
           // TODO: create/copy database file
           return 1;
     }
@@ -54,6 +54,8 @@ int main(int argc, char* argv[])
         Storage::instance().AddFact(element.serializeToString(), element.start_time, element.end_time, false);
     }
     std::cout << std::endl;
+
+    Deamon::demonize();
 
     return 0;
 }
