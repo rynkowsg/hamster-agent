@@ -3,24 +3,28 @@
 #include "ParserXML.h"    // parse
 #include "Data.h"         // Data, DataListPtr
 #include "Storage.h"
-#include "Deamon.h"
+#include "Daemon.hpp"
 
 void test_code();
-void process();
+void process(int sleep_seconds);
+void processForMethod1();
+void processForMethod2(bool (*exit)(), int sleep_seconds);
 
 int main(int argc, char* argv[])
 {
 //    test_code();
 
     // 1. For init script from skeleton script - I don't need to use fork()
-    process();
+//    process(10);
 
     // 2. With fork
-    //Deamon::demonize(&process);
-
+    Daemon("hamster-sync"/*,"/","/tmp/aaa_in","/tmp/aaa_out","/tmp/aaa_err"*/)
+            .demonize(processForMethod1);
+//            .demonize(processForMethod2);
 
     return 0;
 }
+
 
 //-----------
 using boost::filesystem::path;
@@ -71,12 +75,24 @@ void test_code() {
     std::cout << std::endl;
 }
 
-void process() {
-    //----------------
-    //Main Process
-    //----------------
+void process(int sleep_seconds = 60) {
     while(true) {
-        // staff to do
-        sleep(60);    //Sleep for 60 seconds
+        printf("I am working\n");
+        sleep(sleep_seconds);    //Sleep for 60 seconds
     }
+}
+
+void processForMethod1() {
+    // staff to do
+    printf("I am working [method 1]\n");
+}
+
+void processForMethod2(bool (*exit)(), int sleep_seconds) {
+    if(!exit)
+        throw std::runtime_error("exit() method equals null it causes infinite loop");
+    else
+        while(!exit()) {
+            printf("I am working [method 2]\n");
+            sleep(sleep_seconds);    //Sleep for 60 seconds
+        }
 }

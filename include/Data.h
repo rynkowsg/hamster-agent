@@ -35,6 +35,6 @@ typedef std::shared_ptr<Data> DataPtr;
 string tagstoString(const TagsList& vec, const char delim);
 TagsList& stringToTags(const string& s, const char delim, TagsList& elems);
 
-} // namepspace Model
+} // namespace Model
 
 #endif  // FACT_H
