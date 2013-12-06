@@ -1,5 +1,9 @@
 CXX=g++
-CXXFLAGS+=-std=c++11 -Wall -Werror -pedantic -g
+CXXFLAGS+=-std=c++11 -O2 -Wall -Wextra -Werror -pedantic -g
+CXXFLAGS+=-Wcast-qual -Wno-unused-parameter -Wpointer-arith -Wredundant-decls \
+	-Wwrite-strings -Wabi -Wctor-dtor-privacy -Wno-deprecated \
+	-Wno-non-template-friend -Wno-pmf-conversions -Wnon-virtual-dtor \
+	-Woverloaded-virtual -Wsign-promo #-Wshadow
 CXXFLAGS+=-I$(HDIR) $(shell pkg-config dbus-c++-1 --cflags)
 LDFLAGS+=-lboost_filesystem -lboost_date_time -lboost_system
 LDFLAGS+=-lcppdb -lcppdb_sqlite3
@@ -75,8 +79,10 @@ print:
 	@echo "objects   ="\'$(objects)\'
 	@echo "deps      ="\'$(deps)\'
 	@echo "headers   ="\'$(headers)\'
-	@echo $(objects:$(OBJDIR)/Storage.o=)
-	@echo $(src:%.cpp=$(DEPSDIR)/%.d)
-	@echo -----------------
+#	@echo $(objects:$(OBJDIR)/Storage.o=)
+#	@echo $(src:%.cpp=$(DEPSDIR)/%.d)
+	@echo "CXXFLAGS = \"$(CXXFLAGS)\""
+	@echo "LDFLAGS  = \"$(LDFLAGS)\""
+	@echo -----------------------------------------------------------
 
 .PHONY: all clean dbus_prepare print install remove
