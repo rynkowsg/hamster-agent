@@ -66,8 +66,11 @@ INSTALL_DIR=/usr/sbin
 INITD_DIR=/etc/init.d
 
 install:
+	service hamster-sync stop
 	cp $(prog) $(INSTALL_DIR)
 	cp script-initd.sh $(INITD_DIR)/$(prog)
+	chmod +x $(INITD_DIR)/$(prog)
+	service hamster-sync start
 
 remove:
 	$(RM) $(INSTALL_DIR)/$(prog)

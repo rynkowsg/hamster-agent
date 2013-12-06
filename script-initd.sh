@@ -1,10 +1,10 @@
 #!/bin/sh
 # chkconfig 345 85 60
-# description: startup script for hamster daemon
-# processname: hamster-sync-mobile
+# description: startup script for hamster-sync daemon
+# processname: hamster-sync
 
 ### BEGIN INIT INFO
-# Provides:          hamster-sync-mobile
+# Provides:          hamster-sync
 # Required-Start:    $remote_fs $syslog
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
@@ -21,14 +21,13 @@
 
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
-DESC="Service synchronizes mobile hamsters with local hamster"
+DESC="service synchronizes mobile hamsters with local hamster"
 NAME=hamster-sync
 DAEMON=/usr/sbin/$NAME
 DAEMON_ARGS=
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 DEFAULT_CONFIG=/etc/default/$NAME
-
 
 # Exit if the package is not installed
 if [ ! -x "$DAEMON" ] ; then
@@ -56,10 +55,11 @@ do_start()
     #   0 if daemon has been started
     #   1 if daemon was already running
     #   2 if daemon could not be started
-    start-stop-daemon --start --quiet --pidfile $PIDFILE --background --make-pidfile --make --exec $DAEMON --test > /dev/null \
+    start-stop-daemon --start --quiet --pidfile $PIDFILE --background \
+        --make-pidfile --make --exec $DAEMON --test > /dev/null       \
         || return 1
-    start-stop-daemon --start --quiet --pidfile $PIDFILE --background --make-pidfile --exec $DAEMON -- \
-        $DAEMON_ARGS \
+    start-stop-daemon --start --quiet --pidfile $PIDFILE --background \
+        --make-pidfile --exec $DAEMON -- $DAEMON_ARGS                 \
         || return 2
     # Add code here, if necessary, that waits for the process to be ready
     # to handle requests from services started subsequently which depend
@@ -76,7 +76,8 @@ do_stop()
     #   1 if daemon was already stopped
     #   2 if daemon could not be stopped
     #   other if a failure occurred
-    start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE --name $NAME
+    start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE \
+        --name $NAME
     RETVAL="$?"
     [ "$RETVAL" = 2 ] && return 2
     # Wait for children to finish too if this is a daemon that forks
@@ -107,7 +108,7 @@ do_reload() {
 
 case "$1" in
   start)
-    [ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
+    [ "$VERBOSE" != no ] && log_daemon_msg "Starting $NAME" "($DESC)"
     do_start
     case "$?" in
         0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
@@ -115,7 +116,7 @@ case "$1" in
     esac
     ;;
   stop)
-    [ "$VERBOSE" != no ] && log_daemon_msg "Stopping $DESC" "$NAME"
+    [ "$VERBOSE" != no ] && log_daemon_msg "Stopping $NAME" "($DESC)"
     do_stop
     case "$?" in
         0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
@@ -130,7 +131,7 @@ case "$1" in
     # If do_reload() is not implemented then leave this commented out
     # and leave 'force-reload' as an alias for 'restart'.
     #
-    #log_daemon_msg "Reloading $DESC" "$NAME"
+    #log_daemon_msg "Reloading $NAME" "($DESC)"
     #do_reload
     #log_end_msg $?
     #;;
@@ -139,7 +140,7 @@ case "$1" in
     # If the "reload" option is implemented then remove the
     # 'force-reload' alias
     #
-    log_daemon_msg "Restarting $DESC" "$NAME"
+    log_daemon_msg "Restarting $NAME" "($DESC)"
     do_stop
     case "$?" in
       0|1)
