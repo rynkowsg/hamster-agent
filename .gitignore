@@ -13,8 +13,8 @@
 *.a
 
 # Eclipse project files
-.cproject
-.project
+#.cproject
+#.project
 .settings
 .gdbinit
 
