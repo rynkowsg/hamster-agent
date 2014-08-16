@@ -6,7 +6,6 @@ CXXFLAGS+=-Wcast-qual -Wno-unused-parameter -Wpointer-arith -Wredundant-decls \
 	-Woverloaded-virtual -Wsign-promo #-Wshadow
 CXXFLAGS+=-I$(HDIR) $(shell pkg-config dbus-c++-1 --cflags)
 LDFLAGS+=-lboost_filesystem -lboost_date_time -lboost_system
-LDFLAGS+=-lcppdb -lcppdb_sqlite3
 LDFLAGS+=-lmsgpack $(shell pkg-config dbus-c++-1 --libs)
 
 HDIR=include
