@@ -4,6 +4,7 @@
 #include "Data.h"         // Data, DataListPtr
 #include "Storage.h"
 #include "Daemon.hpp"
+#include "config.h"
 
 void test_code();
 void process(int sleep_seconds);
@@ -18,7 +19,7 @@ int main(int argc, char* argv[])
 //    process(10);
 
     // 2. With fork
-    Daemon("hamster-sync"/*,"/","/tmp/aaa_in","/tmp/aaa_out","/tmp/aaa_err"*/)
+    Daemon(PROGRAM_NAME/*,"/","/tmp/aaa_in","/tmp/aaa_out","/tmp/aaa_err"*/)
             .demonize(processForMethod1);
 //            .demonize(processForMethod2);
 
