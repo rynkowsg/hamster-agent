@@ -1,1 +1,7 @@
 build/*
+
+# Qt Creator files
+*.config
+*.creator
+*.files
+*.includes
