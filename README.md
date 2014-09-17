@@ -100,4 +100,4 @@ To stop:     ```sudo service hamster-agent stop```
 To restart:  ```sudo service hamster-agent restart```  
 
 ## License
-Hamster Agent has an GNU GPL v3 License. See the LICENSE.txt for more information.
+Hamster Agent has an GNU GPLv3 license. See the LICENSE file for more information.
