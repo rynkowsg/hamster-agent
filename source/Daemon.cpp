@@ -20,6 +20,7 @@
 #include <sys/types.h>      // open, umask
 #include <syslog.h>         // closelog, openlog, syslog
 #include "Exception.h"
+#include "Utils.h"
 
 const std::string Daemon::DEFAULT_DAEMON_NAME = "sample-daemon";
 const std::string Daemon::DEFAULT_WORKING_DIR = "/";
@@ -84,16 +85,14 @@ void Daemon::createPidfile()
     // Open or create pidfile
     mPidfilefd = open(mPidfile.c_str(), O_CREAT | O_RDWR, 0666);
     if( -1 == mPidfilefd ) {
-        throw DaemonException(std::string(strerror(errno)));
+        throw DaemonException(StringBuilder("Can't open/create the pidfile : ")
+                              .add(strerror(errno)).str());
     }
     // Try to lock pidfile
     if( flock(mPidfilefd, LOCK_EX | LOCK_NB) ) {
         // pidfile is locked, it means that another instance is running
-        if(EWOULDBLOCK == errno) {
-            throw DaemonException(std::string(strerror(errno))
-                    .append(": another instance is running"));
-        }
-        throw DaemonException(std::string(strerror(errno)).append(": another instance is running"));
+        throw DaemonException(StringBuilder("Can't lock the pidfile : ")
+                              .add(strerror(errno)).str());
     }
     syslog(LOG_INFO, "Pidfile has been created.");
 }
@@ -105,7 +104,8 @@ void Daemon::detachFromParent()
 
     // If the pid is less than zero, something went wrong when forking
     if (pid < 0) {
-        throw DaemonException(strerror(errno));
+        throw DaemonException(StringBuilder("Forking went wrong : ")
+                              .add(strerror(errno)).str());
     }
     // If the pid we got back was greater than zero, then the clone was
     // successful and we are the parent
@@ -121,18 +121,20 @@ void Daemon::detachFromParent()
     // Create our own process group
     pid_t sid = setsid();
     if (sid < 0) {
-//        syslog(LOG_ERR, "Could not create process group\n");
-        throw DaemonException(strerror(errno));
+        throw DaemonException(StringBuilder("Can't create own process group : ")
+                              .add(strerror(errno)).str());
     }
     mPid = sid;
-    syslog(LOG_INFO, "Process has been detached from parent process.");
+    syslog(LOG_INFO, "Process has been detached from parent process, PID = %d.",
+           mPid);
 }
 
 void Daemon::savePidToPidfile()
 {
-    const char* buffer = std::to_string(mPid).append("\n").c_str();
+    const char* buffer = StringBuilder(mPid).add("\n").c_str();
     if (-1 == write(mPidfilefd, buffer, strlen(buffer))) {
-        throw DaemonException(strerror(errno));
+        throw DaemonException(StringBuilder("Can't save the pid to pidfile : ")
+                              .add(strerror(errno)).str());
     }
 }
 
@@ -140,8 +142,9 @@ void Daemon::changeWorkingDirectory()
 {
     // Change the current working directory
     if (!mDir.empty() && chdir(mDir.c_str()) < 0) {
-//        syslog(LOG_ERR, "Could not change working directory to %s\n", mDir);
-        throw DaemonException(strerror(errno));
+        throw DaemonException(
+                    StringBuilder("Can't change the working directory to ")
+                    .add(mDir).str());
     }
     syslog(LOG_INFO, "Process has changed the working directory.");
 }
@@ -164,7 +167,8 @@ void Daemon::openNewFileDescriptors()
 
     if (fd0 != STDIN_FILENO || fd1 != STDOUT_FILENO || fd2 != STDERR_FILENO)  {
         //Unexpected file descriptors
-        throw DaemonException("standard file descriptors were not opened as expected");
+        throw DaemonException(
+                    "Standard file descriptors were not opened as expected.");
     }
     syslog(LOG_INFO, "New file descriptors has been opened: "
                      "stdin=%s, stdout=%s, stderr=%s.",
@@ -175,11 +179,13 @@ void Daemon::destroyPidfile()
 {
     // Unlock pidfile
     if( -1 == flock(mPidfilefd, LOCK_UN) ) {
-        throw DaemonException(std::string(strerror(errno)));
+        throw DaemonException(StringBuilder("Can't unlock pidfile : ")
+                              .add(strerror(errno)).str());
     }
     // Remove pidfile
     if( -1 == remove(mPidfile.c_str()) ) {
-        throw DaemonException(std::string(strerror(errno)));
+        throw DaemonException(StringBuilder("Can't remove pidfile")
+                              .add(strerror(errno)).str());
     }
     syslog(LOG_INFO, "Pidfile has been destroyed.");
 }

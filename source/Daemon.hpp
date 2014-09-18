@@ -46,7 +46,7 @@ public:
 
 private:
     std::string mName;
-    int mPid;
+    pid_t mPid;
     std::string mPidfile;
     std::string mDir;
     int mPidfilefd;

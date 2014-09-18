@@ -18,7 +18,7 @@
     public:                                                         \
         Name(const std::string& _message) : Base(_message)          \
         {                                                           \
-            syslog(LOG_ERR, "%s: %s", #Name, _message.c_str());     \
+            syslog(LOG_ERR, "%s! %s", #Name, _message.c_str());     \
         }                                                           \
     };
 
