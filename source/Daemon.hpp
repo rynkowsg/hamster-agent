@@ -14,9 +14,7 @@
 class DaemonException : public std::runtime_error
 {
 public:
-    DaemonException(const std::string& _message) :
-        std::runtime_error(_message)
-    {}
+    DaemonException(const std::string& _message);
 };
 
 class Daemon

@@ -28,6 +28,12 @@ const std::string Daemon::PIDFILE_DIR         = "/var/run/";
 const std::string Daemon::PIDFILE_EXT         = ".pid";
 const int Daemon::DEFAULT_SLEEP_SECONDS = 60;
 
+DaemonException::DaemonException(const std::string& _message) :
+    std::runtime_error(_message)
+{
+    syslog(LOG_ERR, "DaemonException: %s", _message.c_str());
+}
+
 Daemon::Daemon(const std::string& name,
                const std::string& dir,
                const std::string& stdinfile,
@@ -41,23 +47,23 @@ Daemon::Daemon(const std::string& name,
           mOutFile(stdoutfile),
           mErrFile(stderrfile)
 {
+    // Open a connection to the syslog server
+    openlog(mName.c_str(),LOG_NOWAIT|LOG_PID,LOG_USER);
+
     // Call methods related to creating daemon
     create();
 
     // Register signal handler to handle kill signal
     mSignalHandler.setupSignalHandlers({SIGHUP,SIGINT,SIGQUIT,SIGABRT,SIGTERM});
 
-    // Open a connection to the syslog server
-    openlog(mName.c_str(),LOG_NOWAIT|LOG_PID,LOG_USER);
-
     // Sends a message to the syslog daemon
-    syslog(LOG_INFO, "Successfully started daemon\n");
+    syslog(LOG_INFO, "Started daemon");
 }
 
 Daemon::~Daemon()
 {
     destroy();
-    syslog(LOG_INFO, "Successfully destroyed daemon\n");
+    syslog(LOG_INFO, "Destroyed daemon");
     closelog();
 }
 
@@ -90,8 +96,9 @@ void Daemon::createPidfile()
             throw DaemonException(std::string(strerror(errno))
                     .append(": another instance is running"));
         }
-        throw DaemonException(std::string(strerror(errno)));
+        throw DaemonException(std::string(strerror(errno)).append(": another instance is running"));
     }
+    syslog(LOG_INFO, "Pidfile has been created.");
 }
 
 void Daemon::detachFromParent()
@@ -120,8 +127,8 @@ void Daemon::detachFromParent()
 //        syslog(LOG_ERR, "Could not create process group\n");
         throw DaemonException(strerror(errno));
     }
-
     mPid = sid;
+    syslog(LOG_INFO, "Process has been detached from parent process.");
 }
 
 void Daemon::savePidToPidfile()
@@ -139,6 +146,7 @@ void Daemon::changeWorkingDirectory()
 //        syslog(LOG_ERR, "Could not change working directory to %s\n", mDir);
         throw DaemonException(strerror(errno));
     }
+    syslog(LOG_INFO, "Process has changed the working directory.");
 }
 
 void Daemon::closeStandardFileDescriptors()
@@ -147,6 +155,7 @@ void Daemon::closeStandardFileDescriptors()
     close(STDIN_FILENO);
     close(STDOUT_FILENO);
     close(STDERR_FILENO);
+    syslog(LOG_INFO, "Standard file descriptors has been closed.");
 }
 
 void Daemon::openNewFileDescriptors()
@@ -160,6 +169,9 @@ void Daemon::openNewFileDescriptors()
         //Unexpected file descriptors
         throw DaemonException("standard file descriptors were not opened as expected");
     }
+    syslog(LOG_INFO, "New file descriptors has been opened: "
+                     "stdin=%s, stdout=%s, stderr=%s.",
+                     mInFile.c_str(), mOutFile.c_str(), mErrFile.c_str());
 }
 
 void Daemon::destroyPidfile()
@@ -172,6 +184,7 @@ void Daemon::destroyPidfile()
     if( -1 == remove(mPidfile.c_str()) ) {
         throw DaemonException(std::string(strerror(errno)));
     }
+    syslog(LOG_INFO, "Pidfile has been destroyed.");
 }
 
 void Daemon::demonize(void (*process)(), int sleep_seconds)
