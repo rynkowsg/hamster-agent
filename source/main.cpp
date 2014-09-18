@@ -7,7 +7,6 @@
 #include "config.h"
 
 void test_code();
-void process(int sleep_seconds);
 void processForMethod1();
 void processForMethod2(bool (*exit)(), int sleep_seconds);
 
@@ -15,13 +14,8 @@ int main(int argc, char* argv[])
 {
 //    test_code();
 
-    // 1. For init script from skeleton script - I don't need to use fork()
-//    process(10);
-
-    // 2. With fork
-    Daemon(PROGRAM_NAME/*,"/","/tmp/aaa_in","/tmp/aaa_out","/tmp/aaa_err"*/)
-            .demonize(processForMethod1);
-//            .demonize(processForMethod2);
+//    Daemon(PROGRAM_NAME).demonize(processForMethod2);
+    Daemon(PROGRAM_NAME).demonize(processForMethod1);
 
     return 0;
 }
@@ -74,13 +68,6 @@ void test_code() {
         Storage::instance().AddFact(element.serializeToString(), element.start_time, element.end_time, false);
     }
     std::cout << std::endl;
-}
-
-void process(int sleep_seconds = 60) {
-    while(true) {
-        printf("I am working\n");
-        sleep(sleep_seconds);    //Sleep for 60 seconds
-    }
 }
 
 void processForMethod1() {

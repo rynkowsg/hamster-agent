@@ -1,7 +1,8 @@
-build/*
+/build
 
 # Qt Creator files
-*.config
-*.creator
-*.files
-*.includes
+/*.config
+/*.creator
+/*.creator.user
+/*.files
+/*.includes

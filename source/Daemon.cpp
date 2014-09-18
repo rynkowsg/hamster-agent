@@ -185,5 +185,5 @@ void Daemon::demonize(void (*process)(), int sleep_seconds)
 
 void Daemon::demonize(void (*process)(bool (*)(), int), int sleep_seconds)
 {
-        if (process) process(mSignalHandler.gotExitSignal, sleep_seconds);
+    if (process) process(mSignalHandler.gotExitSignal, sleep_seconds);
 }
