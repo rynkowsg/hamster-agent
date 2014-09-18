@@ -11,12 +11,6 @@
 #include <string>
 #include "SignalHandler.hpp"
 
-class DaemonException : public std::runtime_error
-{
-public:
-    DaemonException(const std::string& _message);
-};
-
 class Daemon
 {
 public:

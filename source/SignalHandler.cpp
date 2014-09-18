@@ -4,8 +4,13 @@
  *  Created on: 5 gru 2013
  *      Author: Grzegorz Rynkowski
  */
-#include <csignal>              // signal
 #include "SignalHandler.hpp"
+
+#include <csignal>          // signal
+#include "Exception.h"
+
+DefineException(SignalException, std::runtime_error)
+
 
 bool SignalHandler::mbGotExitSignal = false;
 

@@ -9,15 +9,6 @@
 #define SIGNALHANDLER_HPP_
 
 #include <initializer_list> // initializer_list
-#include <stdexcept>        // runtime_error
-
-class SignalException : public std::runtime_error
-{
-public:
-    SignalException(const std::string& _message) :
-        std::runtime_error(_message)
-    {}
-};
 
 class SignalHandler
 {

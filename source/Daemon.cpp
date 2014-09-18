@@ -14,12 +14,12 @@
 #include <cstring>          // strerror
 #include <fcntl.h>          // open
 #include <unistd.h>         // chdir, close, fork, setsid, sleep, write
-#include <stdexcept>        // runtime_error
 #include <string>           // to_string
 #include <sys/file.h>       // flock
 #include <sys/stat.h>       // open, umask
 #include <sys/types.h>      // open, umask
 #include <syslog.h>         // closelog, openlog, syslog
+#include "Exception.h"
 
 const std::string Daemon::DEFAULT_DAEMON_NAME = "sample-daemon";
 const std::string Daemon::DEFAULT_WORKING_DIR = "/";
@@ -28,11 +28,8 @@ const std::string Daemon::PIDFILE_DIR         = "/var/run/";
 const std::string Daemon::PIDFILE_EXT         = ".pid";
 const int Daemon::DEFAULT_SLEEP_SECONDS = 60;
 
-DaemonException::DaemonException(const std::string& _message) :
-    std::runtime_error(_message)
-{
-    syslog(LOG_ERR, "DaemonException: %s", _message.c_str());
-}
+
+DefineException(DaemonException, std::runtime_error)
 
 Daemon::Daemon(const std::string& name,
                const std::string& dir,
