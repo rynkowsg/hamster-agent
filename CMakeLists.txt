@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 2.8)
-project (hamster-agent)
+project(hamster-agent)
 
 option(CMAKE_LOG "Print logs from CMakefiels" OFF)
 
 # The version number.
-set (PROJECT_VERSION_MAJOR 0)
-set (PROJECT_VERSION_MINOR 1)
-set (PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}" CACHE INTERNAL "")
+set(PROJECT_VERSION_MAJOR 0)
+set(PROJECT_VERSION_MINOR 1)
+set(PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}" CACHE INTERNAL "")
 
 set(CMAKE_BUILD_TYPE "Debug")   #TODO: Release has some problems with NDEBUG flag. Check it!
 
@@ -14,12 +14,13 @@ set(CMAKE_BUILD_TYPE "Debug")   #TODO: Release has some problems with NDEBUG fla
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -Werror "
-					"-pedantic -Wcast-qual -Wno-unused-parameter "
-					"-Wpointer-arith -Wredundant-decls -Wwrite-strings -Wabi "
-					"-Wctor-dtor-privacy -Wno-deprecated "
-					"-Wno-non-template-friend -Wno-pmf-conversions "
-					"-Wnon-virtual-dtor -Woverloaded-virtual -Wsign-promo")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra "
+#                    "-Werror "
+                    "-pedantic -Wcast-qual -Wno-unused-parameter "
+                    "-Wpointer-arith -Wredundant-decls -Wwrite-strings -Wabi "
+                    "-Wctor-dtor-privacy -Wno-deprecated "
+                    "-Wno-non-template-friend -Wno-pmf-conversions "
+                    "-Wnon-virtual-dtor -Woverloaded-virtual -Wsign-promo")
 string(REPLACE ";" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 
 # uninstall target
@@ -47,6 +48,7 @@ if(CMAKE_LOG)
     message(STATUS "CMAKE_MODULE_PATH  = ${CMAKE_MODULE_PATH}")
     message(STATUS "CMAKE_LOG          = ${CMAKE_LOG}")
     message(STATUS "CMAKE_BUILD_TYPE   = ${CMAKE_BUILD_TYPE}")
+    message(STATUS "CMAKE_CXX_COMPILER   = ${CMAKE_CXX_COMPILER}")
     message(STATUS "CMAKE_CXX_FLAGS_DEBUG   = ${CMAKE_CXX_FLAGS_DEBUG}")
     message(STATUS "CMAKE_CXX_FLAGS_RELEASE = ${CMAKE_CXX_FLAGS_RELEASE}")
     message(STATUS "CMAKE_CXX_FLAGS         = ${CMAKE_CXX_FLAGS}")
